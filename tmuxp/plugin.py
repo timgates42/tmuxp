@@ -1,7 +1,5 @@
-from packaging.version import Version
-
 import libtmux
-from libtmux.common import get_version
+from libtmux.common import Version, get_version
 
 from .__about__ import __version__
 from .exc import TmuxpPluginException

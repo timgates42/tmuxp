@@ -6,6 +6,7 @@ tmuxp.util
 """
 import logging
 import os
+import re
 import shlex
 import subprocess
 import sys
@@ -18,6 +19,27 @@ from ._compat import console_to_str
 logger = logging.getLogger(__name__)
 
 PY2 = sys.version_info[0] == 2
+
+version_component_re = re.compile(r"(\d+|[a-z]+|\.)")
+
+
+def get_version_tuple(version):
+    """
+    Return a tuple of version numbers (e.g. (1, 2, 3)) from the version
+    string (e.g. '1.2.3').
+    Credit: Django, License: MIT
+    https://github.com/django/django/blob/dc9deea/django/utils/version.py#L99
+    """
+    version_numbers = []
+    for item in version_component_re.split(version):
+        if item and item != ".":
+            try:
+                component = int(item)
+            except ValueError:
+                break
+            else:
+                version_numbers.append(component)
+    return tuple(version_numbers)
 
 
 def run_before_script(script_file, cwd=None):
